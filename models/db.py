@@ -1,88 +1,113 @@
 # -*- coding: utf-8 -*-
 
-#########################################################################
-## This scaffolding model makes your app work on Google App Engine too
-## File is released under public domain and you can use without limitations
-#########################################################################
+from gluon.tools import Auth, Crud, Service, PluginManager, Mail, prettydate
 
-## if SSL/HTTPS is properly configured and you want all HTTP requests to
-## be redirected to HTTPS, uncomment the line below:
-# request.requires_https()
-
-if not request.env.web2py_runtime_gae:
-    ## if NOT running on Google App Engine use SQLite or other DB
-    db = DAL('sqlite://storage.sqlite',pool_size=1,check_reserved=['all'])
-else:
-    ## connect to Google BigTable (optional 'google:datastore://namespace')
-    db = DAL('google:datastore')
-    ## store sessions and tickets there
-    session.connect(request, response, db=db)
-    ## or store session in Memcache, Redis, etc.
-    ## from gluon.contrib.memdb import MEMDB
-    ## from google.appengine.api.memcache import Client
-    ## session.connect(request, response, db = MEMDB(Client()))
-
-## by default give a view/generic.extension to all actions from localhost
-## none otherwise. a pattern can be 'controller/function.extension'
+db = DAL('sqlite://storage.sqlite',pool_size=1,check_reserved=['all'])
 response.generic_patterns = ['*'] if request.is_local else []
-## (optional) optimize handling of static files
-# response.optimize_css = 'concat,minify,inline'
-# response.optimize_js = 'concat,minify,inline'
-## (optional) static assets folder versioning
-# response.static_version = '0.0.0'
-#########################################################################
-## Here is sample code if you need for
-## - email capabilities
-## - authentication (registration, login, logout, ... )
-## - authorization (role based authorization)
-## - services (xml, csv, json, xmlrpc, jsonrpc, amf, rss)
-## - old style crud actions
-## (more options discussed in gluon/tools.py)
-#########################################################################
+response.optimize_css = 'concat,minify,inline'
+response.optimize_js = 'concat,minify,inline'
+response.static_version = '1.0.0'
 
-from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
 auth = Auth(db)
 crud, service, plugins = Crud(db), Service(), PluginManager()
 
-## create all tables needed by auth if not custom tables
-auth.define_tables(username=False, signature=False)
+# ----------
+patient_extra_fields = [
+    Field('pesel', 'integer', length=16, requires=[IS_NOT_EMPTY(), IS_LENGTH(11, 11, error_message='pesel ma długość 11!')]),
+    Field('address', length=128, requires=[IS_NOT_EMPTY()]),
+    Field('city', length=128, requires=[IS_NOT_EMPTY(), IS_ALPHANUMERIC(error_message='tylko znaki alfanumeryczne!')]),
+    Field('zip', length=8, requires=[IS_NOT_EMPTY(), IS_MATCH('^\d{2}-\d{3}?$', error_message='błędny kod pocztowy')])
+]
 
-## configure email
-mail = auth.settings.mailer
-mail.settings.server = 'logging' or 'smtp.gmail.com:587'
-mail.settings.sender = 'you@gmail.com'
-mail.settings.login = 'username:password'
+doctor_extra_fields = [
+    Field('PWZ', 'integer', length=7, requires=[IS_NOT_EMPTY(), IS_LENGTH(7, 7, error_message='długość pwz wynosi 7')])
+]
 
-## configure auth policy
+auth.settings.extra_fields['auth_user'] = ([
+    Field('username', length=36, requires=IS_NOT_EMPTY()),
+    # Field('first_name', length=36,
+    # Field('last_name', length=36, requires=[IS_NOT_EMPTY(), IS_ALPHANUMERIC()]),
+    Field('user_type', requires=IS_IN_SET(['pacjent', 'lekarz', 'admin']))] +
+    patient_extra_fields +
+    doctor_extra_fields)
+auth.define_tables(username=True, signature=False)
+
+db.auth_user.first_name.requires=[IS_NOT_EMPTY(), IS_MATCH('^[A-Z][a-z]*$', error_message='jedno słowo, z dużej litery, alfanumeryczne')]
+db.auth_user.last_name.requires=[IS_NOT_EMPTY(), IS_MATCH('^[A-Z][A-z\-]*$', error_message='jedno słowo, z dużej litery, alfanumeryczne')]
+db.auth_user.pesel.requires.append(IS_NOT_IN_DB(db, db.auth_user.pesel))
+db.auth_user.username.requires.append(IS_NOT_IN_DB(db, db.auth_user.username))
+
+auth.settings.create_user_groups = False
 auth.settings.registration_requires_verification = False
-auth.settings.registration_requires_approval = False
+auth.settings.registration_requires_approval = True
 auth.settings.reset_password_requires_verification = True
 
-## if you need to use OpenID, Facebook, MySpace, Twitter, Linkedin, etc.
-## register with janrain.com, write your domain:api_key in private/janrain.key
-from gluon.contrib.login_methods.rpx_account import use_janrain
-use_janrain(auth, filename='private/janrain.key')
+##################################################################
+def create_hours(start, end):
+    list = []
+    # start = int(start[:2])
+    # end = int(end[:2])
+    # start = start.zfill(5)
+    # end = end.zfill(5)
+    while start < end :
+        list.append(start)
 
-#########################################################################
-## Define your tables below (or better in another model file) for example
-##
-## >>> db.define_table('mytable',Field('myfield','string'))
-##
-## Fields can be 'string','text','password','integer','double','boolean'
-##       'date','time','datetime','blob','upload', 'reference TABLENAME'
-## There is an implicit 'id integer autoincrement' field
-## Consult manual for more options, validators, etc.
-##
-## More API examples for controllers:
-##
-## >>> db.mytable.insert(myfield='value')
-## >>> rows=db(db.mytable.myfield=='value').select(db.mytable.ALL)
-## >>> for row in rows: print row.id, row.myfield
-#########################################################################
+        if start[3:5] == '30':
+            start = str(int(start[0:2]) + 1) + ":00"
+        else:
+            start = start[0:2] + ":30"
+    return list
 
-## after defining tables, uncomment below to enable auditing
-# auth.enable_record_versioning(db)
+db.define_table('department',
+    Field('name', requires=[IS_NOT_EMPTY()]),
+    format='%(name)s'
+)
+db.department.name.requires.append(IS_NOT_IN_DB(db, db.department.name))
 
+db.define_table('office_hours',
+    Field('week_day', requires=IS_IN_SET(['Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek'])),
+    Field('office_begin', length=5, requires=IS_IN_SET(create_hours('09:00', '12:00'))),
+    Field('office_end', length=5, requires=IS_IN_SET(create_hours('09:00', '12:00'))),
+    Field('id_doctor', 'reference auth_user'),
+    Field('id_department', 'reference department')
+)
+
+db.define_table('visit',
+    Field('id_patient', 'reference auth_user'),
+    Field('id_doctor', 'reference auth_user'),
+    Field('visit_day', 'date', requires=IS_NOT_EMPTY()),
+    Field('visit_hour', length=5, requires=IS_NOT_EMPTY())
+)
+
+# db.children.department.requires = IS_IN_DB(db, db.parent.id, '%(name)s')
+
+# db.office_hours.office_end.requires.append()
+# db.office_hours.office_end.requires.append(IS_NOT_IN_DB(db, db.office_hours.office_end))
+
+###########################################################
+
+
+mail = Mail()
 mail.settings.server = settings.email_server
 mail.settings.sender = settings.email_sender
 mail.settings.login = settings.email_login
+auth.settings.mailer = mail
+
+## >>> db.mytable.insert(myfield='value')
+## >>> rows=db(db.mytable.myfield=='value').select(db.mytable.ALL)
+## >>> for row in rows: print row.id, row.myfield
+
+##########################################################
+
+def remove_extra_fields(type):
+    rem_fields = {
+        'pacjent': doctor_extra_fields + [db.auth_user.user_type],
+        'lekarz': patient_extra_fields + [db.auth_user.user_type, db.auth_user.email],
+        'admin': patient_extra_fields + doctor_extra_fields + [db.auth_user.user_type, db.auth_user.email]
+    }
+    for field in rem_fields[type]:
+        field.readable = field.writable = False
+
+auth.settings.login_next = URL('index')
+auth.settings.register_next = URL('user', args='login')
+auth.settings.register_onaccept.append(lambda form: auth.add_membership('pacjent', db(db.auth_user.username == form.vars.username).select().first().id))
