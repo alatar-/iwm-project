@@ -1,0 +1,31 @@
+# GIT
+*.orig
+
+# LOGS
+*.log
+*.log.?
+
+# PYTHON
+*.py[cod]
+
+# WINDOWS
+Thumbs.db
+
+# TEMP
+*~
+
+# IDEE
+.project
+.settings
+.idea
+nbproject
+
+# BUILT
+*.exe
+*.dll
+*.o
+*.out
+Debug
+Release
+dist
+build
