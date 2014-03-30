@@ -10,7 +10,7 @@ if auth.user:
     if auth.has_membership(1):
         response.menu = [
             ('Umów wizytę', False, URL('pacjent', 'nowa_wizyta')),
-            ('Moje wizyty', False, URL('pacjent', 'moje_wizyty'))
+            ('Moje wizyty', False, URL('pacjent', 'moje_wizyty')),
         ]
     elif auth.has_membership(2):
         response.menu = [

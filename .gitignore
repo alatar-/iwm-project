@@ -29,3 +29,8 @@ Debug
 Release
 dist
 build
+
+cache
+sessions
+databases
+errors

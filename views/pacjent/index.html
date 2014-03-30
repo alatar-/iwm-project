@@ -1,0 +1,8 @@
+{{extend 'layout.html'}}
+<h1>Wybierz poradnię:</h1>
+{{=grid1}}
+{{if request.args[0]:}}
+<h2>Wybierz lekarza:</h2>
+{{=grid2}}
+{{pass}}
+

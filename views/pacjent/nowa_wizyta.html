@@ -1,0 +1,41 @@
+{{extend 'layout.html'}}
+{{import urllib}}
+<h2>Wybierz poradnię:</h2>
+{{=grid1}}
+{{if request.args(0):}}
+<h2>Wybierz lekarza:</h2>
+{{=grid2}}
+{{pass}}
+{{if request.args(1):}}
+<h2>Wybierz datę:</h2>
+{{=form}}
+    {{if request.args(2):}}
+    <h2>Wybierz wolną godzinę:</h2>
+        <table>
+        <tr>
+            <th>Dzień:</th>
+            <th></th>
+            <th>Godzina:</th>
+            <th>Wybierz:</th>
+        </tr>
+        {{item = 0}}
+        {{for key in grid3:}}
+            {{for hour in grid3[key]:}}
+                {{item += 1}}
+                <tr>
+                    <td>{{=key[1]}}</td>
+                    <td>{{=key[0]}}</td>
+                    <td>{{=hour}}</td>
+                    <td>[ {{=A('wybierz', _href=URL('pacjent', 'dodaj', args=[key[2], key[3], key[1], hour[0:2], hour[3:5] ]))}} ]</td>
+                </tr>
+            {{pass}}
+        {{pass}}
+        {{if not item:}}
+            <tr>
+                <td>Brak wyników</td>
+            </tr>
+        {{pass}}
+        </table>
+    {{pass}}
+{{pass}}
+
