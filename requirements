@@ -1,0 +1,46 @@
+    telefon i dane kontaktowe do osoby, z którą się kontaktować w razie nagłego wypadku)
+
+interfejs dla pacjenta
+    podanie danych kontaktowych (i tak wymagane przy rejestracji u lekarza)   (specjalność + imię i nazwisko lekarza)
+    wskazaniu do jakiego lekarza pacjent chce się zapisać 
+    przeglądania wizyt, odwoływanie i historia
+interfejs dla personelu medycznego
+    rejerstracja - podaje datę i godzinę wizyty oraz jej powód.
+        Powód można wybierać z predefiniowanej listy lub wpisywać ręcznie.
+interfejs dla lekarza
+    po wizycie
+        uzupełnia rozpoznanie, 
+        przeprowadzone procedury medyczne
+        zapisane leki (ICD-9, ICD-10, ATC/DDD 
+                        (lub z listy leków dopuszczonych do obrotu (.pdf) lub (.xls)) + możliwość wybierania po nazwie lub po numerze ICD-*/ATC).
+    dodawania uwag do najblizszej wizyty
+
+Walidacja nie może blokować zapisu danych, a jedynie ostrzegać (przed zapisem) o ich niepoprawności.
+
+obsługa NN (pacjent nieznany) - możliwość wprowadzenia tylko przez biuro przyjęć!
+Dodatkowo formularz wyświetlający dane pacjenta wyświetla automatycznie obliczony jego wiek.
+
+przypomnienia - bramka sms
+    Niektóre przypomnienia mogą być dodawane do systemu automatycznie - kolejne wizyty szczepień itp.
+    Przypomnienia automatyczne można zdefiniować w systemie.
+    System wysyła powiadomienie na e-mail i/lub sms pacjenta lub jego opiekuna.
+    Przypomnienie wysyłane jest w ustawianym w systemie wyprzedzeniem przed wizytą.
+
+Dodatkowo: 
+umieszczenie w systemie kalendarza szczepień dzieci oraz predefiniowanych okresów powtórzeń innych szczepień (żółtaczka?), dzięki czemu możliwe będzie automatyczne podpowiadanie terminów kolejnych wizyt.
+Przykład:
+Pacjent rejestruje się u lekarza i podaje dane kontaktowe. Dzięki temu jego adres e-mail lub numer telefonu komórkowego znajduje się w systemie. Następnie umawia się na wizytę kontaktując się z recepcją. Recepcjonistka ustala wolny termin i wprowadza go do systemu podając datę, godzinę i przyczynę wizyty. Na dzień przed wizytą system wysyła pacjentowi przypomnienie, że dnia następnego jest on umówiony na wizyte u lekarza. Podczas wizyty lekarz ustala z pacjentem termin następnej wizyty, wpisując uwagę, że pacjent ma np. przyjść na czczo.
+Motywacja:
+Na wizytę (do specjalisty) trzeba czekać nawet kilka miesięcy - można zapomnieć, dlatego ważne są przypomnienia.
+
+
+
+split validation:
+    ####### 3rd level
+    form = SQLFORM.factory(
+        Field('data', 'date', label="", requires=[
+            IS_DATE_IN_RANGE(
+                minimum=(datetime.date.today() + datetime.timedelta(days=1)),
+                maximum=(datetime.date.today() + datetime.timedelta(days=150)),
+                error_message='maksymalnie 150 dni w przód')])
+    )
