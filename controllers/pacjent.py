@@ -26,34 +26,17 @@ def moje_wizyty():
 @auth.requires_membership('pacjent')
 def nowa_wizyta():
 
-    db.department.id.readable = False
-    query1 = db.department
-
-    form = SQLFORM.factory(
-        Field('data', 'date', label="", requires=[
-            IS_DATE_IN_RANGE(
-                minimum=(datetime.date.today() + datetime.timedelta(days=1)),
-                maximum=(datetime.date.today() + datetime.timedelta(days=730)),
-                error_message='w sensownym zakresie kolego...')])
-    )
-
-    grid3 = {}
-    if form.process().accepted:
-        response.flash = ''
-        redirect(URL('nowa_wizyta', args=[request.args(0), request.args(1), form.vars.data]))
-
+    ####### 4th level
     if request.args(2):
-        # form.vars.data.default = form.vars.data
-        # grid3 = ''
+        grid3 = {}
         map = {'Monday': "Poniedziałek", "Tuesday": "Wtorek", "Wednesday": "Środa", "Thursday": "Czwartek",
          "Friday": "Piątek", "Saturday" : "Sobota", "Sunday" : "Niedziela"}
-        for i in range(-2,3,1):
+        for i in range(-2,5,1):
             dat = request.args(2)
             date = (datetime.date(int(dat[0:4]), int(dat[5:7]), int(dat[8:10])) + datetime.timedelta(days=i))
             day = map[date.strftime("%A")]
 
             rows = db((db.office_hours.id_doctor == request.args(1)) & (db.office_hours.week_day == day) & (db.office_hours.id_department == request.args(0))).select()
-            #
             key = (str(day), str(date), str(request.args(0)), str(request.args(1)))
             grid3[key] = []
             for row in rows:
@@ -61,20 +44,23 @@ def nowa_wizyta():
 
             rows2 = db((db.visit.visit_day == str(date)) & (db.visit.id_doctor == request.args(1))).select()
 
-            # grid3[key] = []
             for row in rows2:
-                # try:
-                #     grid3[key].append(row.visit_hour)
                 if row.visit_hour in grid3[key]:
                     grid3[key].remove(row.visit_hour)
-                # except:
-                #     pass
 
+    ####### 3rd level
+    form = SQLFORM.factory(
+        Field('data', 'date', label="", requires=[
+            IS_DATE_IN_RANGE(
+                minimum=(datetime.date.today() + datetime.timedelta(days=1)),
+                maximum=(datetime.date.today() + datetime.timedelta(days=150)),
+                error_message='maksymalnie 150 dni w przód')])
+    )
+    if form.process().accepted:
+        response.flash = ''
+        redirect(URL('nowa_wizyta', args=[request.args(0), request.args(1), form.vars.data]))
 
-
-    # elif form.errors:
-    #     response.flash = 'form has errors'
-
+    ####### 2nd level
     if request.args(0):
         query1 = (db.department.id == request.args(0))
         query2 = (db.office_hours.id_department == request.args(0))
@@ -112,7 +98,12 @@ def nowa_wizyta():
                              orderby=db.office_hours.week_day|db.office_hours.office_begin,
                              csv=False
         )
+    
 
+
+    ####### 1st level
+    db.department.id.readable = False
+    query1 = db.department if not request.args(0) else (db.department.id == request.args(0))
     grid1 = SQLFORM.grid(query=query1,
                         user_signature=False,
                         editable=False,
@@ -131,24 +122,8 @@ def nowa_wizyta():
                                )
                         ],
                         csv=False
-    )
-    #
-    # if not request.args(0):
-    #     db.department.id.readable = False
-    #     grid1 = SQLFORM.grid(db.department.id == 0,
-    #                          user_signature=False,
-    #                          editable=False,
-    #                          deletable=False,
-    #                          details=False,
-    #                          create=False,
-    #                          links=[dict(
-    #                              header='Wybierz poradnie',
-    #                              body=lambda row: A('wybierz', _href=URL(args=[row.id]))
-    #                          )],
-    #                          csv=False
-    #     )
-    #
-    #     grid2 = 'taf'
+    )       
+
     return locals()
 
 
@@ -219,28 +194,11 @@ def szukaj():
 
 @auth.requires_membership('pacjent')
 def dodaj():
-    if not session.visit:
-        session.visit = []
-
-    # session.visit.append((request.args(0), request.args(1), request.args(2), request.args(3) + ':' + request.args(4)))
-    session.visit.append((request.args(0), request.args(1), request.args(2), request.args(3) + ':' + request.args(4), datetime.datetime.now()))
-
-    redirect(URL('moje_wizyty'))
-
-@auth.requires_membership('pacjent')
-def zatwierdz():
-
-    if request.args(0):
-        try:
-            db.visit.insert(id_patient=auth.user_id,
-                        id_doctor=int(session.visit[int(request.args(0))][1]),
-                        visit_day=session.visit[int(request.args(0))][2],
-                        visit_hour=session.visit[int(request.args(0))][3]
-                        )
-            session.visit.remove(session.visit[int(request.args(0))])
-        except:
-            pass
-            # return {"a": (type((session.visit[int(request.args(0))][1])), (session.visit[int(request.args(0))][1]).isdigit())}
-            # return {["a" : (type(request.args(0)), request.args(0).isdigit())}
+    db.visit.insert(
+        id_patient=auth.user_id,
+        id_doctor=request.args(1),
+        visit_day=request.args(2),
+        visit_hour=(request.args(3) + ':' + request.args(4)),
+    )
 
     redirect(URL('moje_wizyty'))
