@@ -27,8 +27,8 @@ def user():
     to decorate functions that need access control
     """
     if request.args(0) == 'register':
-        remove_extra_fields('admin')
-        db.auth_user.user_type.default = 'admin'
+        remove_extra_fields('pacjent')
+        db.auth_user.user_type.default = 'pacjent'
 
     if request.args(0) ==  'profile':
         remove_extra_fields(auth.user.user_type)
