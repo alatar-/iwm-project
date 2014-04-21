@@ -54,13 +54,20 @@ def nowa_wizyta():
             date = (datetime.date(int(dat[0:4]), int(dat[5:7]), int(dat[8:10])) + datetime.timedelta(days=i))
             day = map[date.strftime("%A")]
 
-            rows = db((db.office_hours.id_doctor == request.args(1)) & (db.office_hours.week_day == day) & (db.office_hours.id_department == request.args(0))).select()
+            rows = db(
+                (db.office_hours.id_doctor == request.args(1)) & 
+                (db.office_hours.week_day == day) & 
+                (db.office_hours.id_department == request.args(0))
+            ).select()
             key = (str(day), str(date), str(request.args(0)), str(request.args(1)))
             grid3[key] = []
             for row in rows:
                 grid3[key].extend(create_hours(str(row.office_begin), str(row.office_end)))
 
-            rows2 = db((db.visit.visit_day == str(date)) & (db.visit.id_doctor == request.args(1))).select()
+            rows2 = db(
+                (db.visit.visit_day == str(date)) & 
+                (db.visit.id_doctor == request.args(1))
+            ).select()
 
             for row in rows2:
                 if row.visit_hour in grid3[key]:
@@ -86,7 +93,10 @@ def nowa_wizyta():
         query2 = (db.office_hours.id_department == request.args(0))
 
         if request.args(1):
-            query2 = (db.office_hours.id_department == request.args(0)) & (db.office_hours.id_doctor == request.args(1))
+            query2 = (
+                db.office_hours.id_department == request.args(0)) &
+                (db.office_hours.id_doctor == request.args(1)
+            )
 
         db.auth_user.id.readable = False
         grid2 = SQLFORM.grid(
@@ -163,15 +173,21 @@ def szukaj():
             date = datetime.date.today() + datetime.timedelta(days=i)
             day = map[date.strftime("%A")]
 
-            rows = db((db.office_hours.id_doctor == request.args(1)) & (db.office_hours.week_day == day) & (
-                db.office_hours.id_department == request.args(0))).select()
+            rows = db(
+                (db.office_hours.id_doctor == request.args(1)) & 
+                (db.office_hours.week_day == day) & 
+                (db.office_hours.id_department == request.args(0))
+            ).select()
             #
 
             list_ = []
             for row in rows:
                 list_.extend(create_hours(str(row.office_begin), str(row.office_end)))
 
-            rows2 = db((db.visit.visit_day == str(date)) & (db.visit.id_doctor == request.args(1))).select()
+            rows2 = db(
+                (db.visit.visit_day == str(date)) & 
+                (db.visit.id_doctor == request.args(1))
+            ).select()
 
             for row in rows2:
                 if row.visit_hour in list_:
@@ -186,8 +202,8 @@ def szukaj():
             day = map[date.strftime("%A")]
 
             rows = db(
-                db.office_hours.week_day == day & 
-                db.office_hours.id_department == request.args(0)
+                (db.office_hours.week_day == day) & 
+                (db.office_hours.id_department == request.args(0))
             ).select()
 
             min_ = '20:00'
@@ -197,8 +213,8 @@ def szukaj():
                 list2 = (create_hours(str(row.office_begin), str(row.office_end)))
 
                 rows2 = db(
-                    db.visit.visit_day == str(date) & 
-                    db.visit.id_doctor == doc_id
+                    (db.visit.visit_day == str(date)) & 
+                    (db.visit.id_doctor == doc_id)
                 ).select()
 
                 for row in rows2:

@@ -27,7 +27,10 @@ def my_form_processing(form):
         form.errors.office_end = 'begin < end'
     else:
         # response.flash = 'in'
-        rows = db((db.office_hours.week_day == form.vars.week_day) & (db.office_hours.id_doctor == auth.user_id)).select()
+        rows = db(
+            (db.office_hours.week_day == form.vars.week_day) & 
+            (db.office_hours.id_doctor == auth.user_id)
+        ).select()
         for row in rows:
             if not (form.vars.office_begin >= row.office_end or form.vars.office_end <= row.office_begin):
                 form.errors.office_end = 'cwaniaczek...'
