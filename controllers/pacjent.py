@@ -11,13 +11,14 @@ def dane_kontaktowe():
     db.contacts.id_patient.readable = db.contacts.id_patient.writable = False
     db.contacts.id.readable = db.contacts.id.writable = False
     db.contacts.id_patient.default = auth.user_id
-    grid = SQLFORM.grid((db.contacts.id_patient == auth.user_id),
-                        user_signature=False,
-                        editable=True,
-                        deletable=True,
-                        details=False,
-                        create=True,
-                        csv=False,
+    grid = SQLFORM.grid(
+        db.contacts.id_patient == auth.user_id,
+        user_signature=False,
+        editable=True,
+        deletable=True,
+        details=False,
+        create=True,
+        csv=False,
     )
     return locals()
 
@@ -25,16 +26,17 @@ def dane_kontaktowe():
 @auth.requires_membership('pacjent')
 def moje_wizyty():
 
-    grid = SQLFORM.grid((db.visit.id_patient == auth.user_id) & (db.visit.visit_day >= request.now.isoformat()),
-                        user_signature=False,
-                        editable=False,
-                        deletable=False,
-                        details=False,
-                        create=False,
-                        left=db.visit.on(db.visit.id_doctor == db.auth_user.id),
-                        fields=[db.visit.visit_day, db.visit.visit_hour, db.auth_user.first_name,  db.auth_user.last_name],
-                        orderby=db.visit.visit_day|db.visit.visit_hour,
-                        csv=False
+    grid = SQLFORM.grid(
+        (db.visit.id_patient == auth.user_id) & (db.visit.visit_day >= request.now.isoformat()),
+        user_signature=False,
+        editable=False,
+        deletable=False,
+        details=False,
+        create=False,
+        left=db.visit.on(db.visit.id_doctor == db.auth_user.id),
+        fields=[db.visit.visit_day, db.visit.visit_hour, db.auth_user.first_name,  db.auth_user.last_name],
+        orderby=db.visit.visit_day|db.visit.visit_hour,
+        csv=False
     )
     return locals()
 
@@ -69,7 +71,9 @@ def nowa_wizyta():
             IS_DATE_IN_RANGE(
                 minimum=(datetime.date.today() + datetime.timedelta(days=1)),
                 maximum=(datetime.date.today() + datetime.timedelta(days=150)),
-                error_message='maksymalnie 150 dni w przód')])
+                error_message='maksymalnie 150 dni w przód'
+            )
+        ])
     )
     if form.process().accepted:
         response.flash = ''
@@ -84,61 +88,61 @@ def nowa_wizyta():
             query2 = (db.office_hours.id_department == request.args(0)) & (db.office_hours.id_doctor == request.args(1))
 
         db.auth_user.id.readable = False
-        grid2 = SQLFORM.grid(query=query2,
-                             user_signature=False,
-                             editable=False,
-                             deletable=False,
-                             details=False,
-                             create=False,
-                             left=db.office_hours.on(db.auth_user.id == db.office_hours.id_doctor),
-                             links=[dict(
-                                        header='Wybierz lekarza',
-                                        body=lambda row: A('wybierz',
-                                                           _href=URL(args=[request.args(0), row.auth_user.id]))
-                                    ),
-                                    dict(
-                                        header='Najbliższa wizyta',
-                                        body=lambda row: A('szukaj',
-                                                           _href=URL('szukaj', args=[request.args(0), row.auth_user.id]))
-                                    )
-                             ],
-                             fields=[
-                                 db.auth_user.last_name,
-                                 db.auth_user.first_name,
-                                 db.office_hours.week_day,
-                                 db.office_hours.office_begin,
-                                 db.office_hours.office_end,
-                                 db.auth_user.id
-                             ],
-                             orderby=db.office_hours.week_day|db.office_hours.office_begin,
-                             csv=False
+        grid2 = SQLFORM.grid(
+            query=query2,
+             user_signature=False,
+             editable=False,
+             deletable=False,
+             details=False,
+             create=False,
+             left=db.office_hours.on(db.auth_user.id == db.office_hours.id_doctor),
+             links=[dict(
+                        header='Wybierz lekarza',
+                        body=lambda row: A('wybierz',
+                                           _href=URL(args=[request.args(0), row.auth_user.id]))
+                    ),
+                    dict(
+                        header='Najbliższa wizyta',
+                        body=lambda row: A('szukaj',
+                                           _href=URL('szukaj', args=[request.args(0), row.auth_user.id]))
+                    )
+             ],
+             fields=[
+                 db.auth_user.last_name,
+                 db.auth_user.first_name,
+                 db.office_hours.week_day,
+                 db.office_hours.office_begin,
+                 db.office_hours.office_end,
+                 db.auth_user.id
+             ],
+             orderby=db.office_hours.week_day|db.office_hours.office_begin,
+             csv=False
         )
-    
-
 
     ####### 1st level
     db.department.id.readable = False
     query1 = db.department if not request.args(0) else (db.department.id == request.args(0))
-    grid1 = SQLFORM.grid(query=query1,
-                        user_signature=False,
-                        editable=False,
-                        deletable=False,
-                        details=False,
-                        create=False,
-                        links=[dict(
-                                    header='Wybierz poradnie',
-                                    body=lambda row: A(
-                                        'wybierz',
-                                         _href=URL(args=[row.id])
-                                    )
-                               ),
-                               dict(
-                                   header='Najbliższa wizyta',
-                                   body=lambda row: A('szukaj',
-                                                      _href=URL('szukaj', args=[row.id]))
-                               )
-                        ],
-                        csv=False
+    grid1 = SQLFORM.grid(
+        query=query1,
+        user_signature=False,
+        editable=False,
+        deletable=False,
+        details=False,
+        create=False,
+        links=[dict(
+                    header='Wybierz poradnie',
+                    body=lambda row: A(
+                        'wybierz',
+                         _href=URL(args=[row.id])
+                    )
+               ),
+               dict(
+                   header='Najbliższa wizyta',
+                   body=lambda row: A('szukaj',
+                                      _href=URL('szukaj', args=[row.id]))
+               )
+        ],
+        csv=False
     )       
 
     return locals()
@@ -176,15 +180,14 @@ def szukaj():
                 break
 
     else:
-
-
         for i in xrange(1, 500):
             date = datetime.date.today() + datetime.timedelta(days=i)
             day = map[date.strftime("%A")]
 
-            rows = db((db.office_hours.week_day == day) & (
-                db.office_hours.id_department == request.args(0))).select()
-            #
+            rows = db(
+                db.office_hours.week_day == day & 
+                db.office_hours.id_department == request.args(0)
+            ).select()
 
             min_ = '20:00'
             d2 = ''
@@ -192,12 +195,14 @@ def szukaj():
                 doc_id = row.id_doctor
                 list2 = (create_hours(str(row.office_begin), str(row.office_end)))
 
-                rows2 = db((db.visit.visit_day == str(date)) & (db.visit.id_doctor == doc_id)).select()
+                rows2 = db(
+                    db.visit.visit_day == str(date) & 
+                    db.visit.id_doctor == doc_id
+                ).select()
 
                 for row in rows2:
                     if row.visit_hour in list2:
                         list2.remove(row.visit_hour)
-
 
                 if len(list2) and min_ > list2[0]:
                     drugi = doc_id
@@ -205,7 +210,6 @@ def szukaj():
 
             if min_ != '20:00':
                 break
-
 
     redirect(URL('nowa_wizyta', args=[request.args(0), drugi, date]))
 

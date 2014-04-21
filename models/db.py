@@ -37,7 +37,8 @@ auth.settings.extra_fields['auth_user'] = ([
     # Field('last_name', length=36, requires=[IS_NOT_EMPTY(), IS_ALPHANUMERIC()]),
     Field('user_type', requires=IS_IN_SET(['pacjent', 'lekarz', 'admin']))] +
     patient_extra_fields +
-    doctor_extra_fields)
+    doctor_extra_fields
+)
 auth.define_tables(username=False, signature=False)
 
 db.auth_user.first_name.requires=[IS_NOT_EMPTY(), IS_MATCH('^[A-Z][a-z]*$', error_message='jedno słowo, z dużej litery, alfanumeryczne')]
