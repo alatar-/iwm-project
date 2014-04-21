@@ -1,8 +1,6 @@
-    telefon i dane kontaktowe do osoby, z którą się kontaktować w razie nagłego wypadku)
+walidacja, polskie znaki w imionach
 
 interfejs dla pacjenta
-    podanie danych kontaktowych (i tak wymagane przy rejestracji u lekarza)   (specjalność + imię i nazwisko lekarza)
-    wskazaniu do jakiego lekarza pacjent chce się zapisać 
     przeglądania wizyt, odwoływanie i historia
 interfejs dla personelu medycznego
     rejerstracja - podaje datę i godzinę wizyty oraz jej powód.
@@ -29,7 +27,11 @@ przypomnienia - bramka sms
 Dodatkowo: 
 umieszczenie w systemie kalendarza szczepień dzieci oraz predefiniowanych okresów powtórzeń innych szczepień (żółtaczka?), dzięki czemu możliwe będzie automatyczne podpowiadanie terminów kolejnych wizyt.
 Przykład:
-Pacjent rejestruje się u lekarza i podaje dane kontaktowe. Dzięki temu jego adres e-mail lub numer telefonu komórkowego znajduje się w systemie. Następnie umawia się na wizytę kontaktując się z recepcją. Recepcjonistka ustala wolny termin i wprowadza go do systemu podając datę, godzinę i przyczynę wizyty. Na dzień przed wizytą system wysyła pacjentowi przypomnienie, że dnia następnego jest on umówiony na wizyte u lekarza. Podczas wizyty lekarz ustala z pacjentem termin następnej wizyty, wpisując uwagę, że pacjent ma np. przyjść na czczo.
+Pacjent rejestruje się u lekarza i podaje dane kontaktowe. 
+Dzięki temu jego adres e-mail lub numer telefonu komórkowego znajduje się w systemie. 
+Następnie umawia się na wizytę kontaktując się z recepcją. 
+Recepcjonistka ustala wolny termin i wprowadza go do systemu podając datę, godzinę i przyczynę wizyty. 
+Na dzień przed wizytą system wysyła pacjentowi przypomnienie, że dnia następnego jest on umówiony na wizyte u lekarza. Podczas wizyty lekarz ustala z pacjentem termin następnej wizyty, wpisując uwagę, że pacjent ma np. przyjść na czczo.
 Motywacja:
 Na wizytę (do specjalisty) trzeba czekać nawet kilka miesięcy - można zapomnieć, dlatego ważne są przypomnienia.
 

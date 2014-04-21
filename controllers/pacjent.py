@@ -6,6 +6,21 @@ import datetime
 def index():
     redirect('moje_wizyty')
 
+@auth.requires_membership('pacjent')
+def dane_kontaktowe():
+    db.contacts.id_patient.readable = db.contacts.id_patient.writable = False
+    db.contacts.id.readable = db.contacts.id.writable = False
+    db.contacts.id_patient.default = auth.user_id
+    grid = SQLFORM.grid((db.contacts.id_patient == auth.user_id),
+                        user_signature=False,
+                        editable=True,
+                        deletable=True,
+                        details=False,
+                        create=True,
+                        csv=False,
+    )
+    return locals()
+
 
 @auth.requires_membership('pacjent')
 def moje_wizyty():
@@ -112,8 +127,10 @@ def nowa_wizyta():
                         create=False,
                         links=[dict(
                                     header='Wybierz poradnie',
-                                    body=lambda row: A('wybierz',
-                                                       _href=URL(args=[row.id]))
+                                    body=lambda row: A(
+                                        'wybierz',
+                                         _href=URL(args=[row.id])
+                                    )
                                ),
                                dict(
                                    header='Najbliższa wizyta',

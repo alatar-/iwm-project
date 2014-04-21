@@ -11,6 +11,7 @@ if auth.user:
         response.menu = [
             ('Umów wizytę', False, URL('pacjent', 'nowa_wizyta')),
             ('Moje wizyty', False, URL('pacjent', 'moje_wizyty')),
+            ('Osoby kontaktowe', False, URL('pacjent', 'dane_kontaktowe')),
         ]
     elif auth.has_membership(2):
         response.menu = [
