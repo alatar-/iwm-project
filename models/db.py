@@ -92,7 +92,7 @@ db.define_table('visit',
     Field('id_doctor', 'reference auth_user'),
     Field('visit_day', 'date', requires=IS_NOT_EMPTY()),
     Field('visit_hour', length=5, requires=IS_NOT_EMPTY()),
-    # Field('reason', length=1000),
+    Field('description', 'text', length=1000),
 )
 
 # db.children.department.requires = IS_IN_DB(db, db.parent.id, '%(name)s')

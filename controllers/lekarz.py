@@ -21,7 +21,7 @@ def wizyty():
     )
     return locals()
 
-# @auth.requires_membership('lekarz')
+@auth.requires_membership('lekarz')
 def my_form_processing(form):
     if form.vars.office_begin >= form.vars.office_end:
         form.errors.office_end = 'begin < end'

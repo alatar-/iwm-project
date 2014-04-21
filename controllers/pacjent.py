@@ -26,15 +26,16 @@ def dane_kontaktowe():
 @auth.requires_membership('pacjent')
 def moje_wizyty():
 
+    db.visit.id.readable = False
     grid = SQLFORM.grid(
         (db.visit.id_patient == auth.user_id) & (db.visit.visit_day >= request.now.isoformat()),
         user_signature=False,
-        editable=False,
+        editable=True,
         deletable=False,
-        details=False,
+        details=True,
         create=False,
         left=db.visit.on(db.visit.id_doctor == db.auth_user.id),
-        fields=[db.visit.visit_day, db.visit.visit_hour, db.auth_user.first_name,  db.auth_user.last_name],
+        fields=[db.visit.visit_day, db.visit.visit_hour, db.auth_user.first_name,  db.auth_user.last_name, db.visit.description],
         orderby=db.visit.visit_day|db.visit.visit_hour,
         csv=False
     )
