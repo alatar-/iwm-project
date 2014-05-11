@@ -30,7 +30,7 @@ def moje_wizyty():
     else:
         if request.args(0):
             pacjentId = request.args(0)
-    grid = SQLFORM.grid((db.visit.id_patient == pacjentId) & (db.visit.visit_day >= request.now.isoformat()),
+    grid1 = SQLFORM.grid((db.visit.id_patient == pacjentId) & (db.visit.visit_day >= request.now.isoformat()),
         user_signature=False,
         editable=True,
         deletable=False,
@@ -39,7 +39,19 @@ def moje_wizyty():
         left=db.visit.on(db.visit.id_doctor == db.auth_user.id),
         fields=[db.visit.visit_day, db.visit.visit_hour, db.auth_user.first_name,  db.auth_user.last_name, db.visit.description],
         orderby=db.visit.visit_day|db.visit.visit_hour,
-        csv=False
+        csv=False,
+    )
+    grid2 = SQLFORM.grid((db.visit.id_patient == pacjentId) & (db.visit.visit_day < request.now.isoformat()),
+        user_signature=False,
+        editable=True,
+        deletable=False,
+        details=True,
+        create=False,
+        left=db.visit.on(db.visit.id_doctor == db.auth_user.id),
+        fields=[db.visit.visit_day, db.visit.visit_hour, db.auth_user.first_name,  db.auth_user.last_name, db.visit.description],
+        orderby=db.visit.visit_day|db.visit.visit_hour,
+        csv=False,
+        links=[dict(header='', body=lambda row: A('zobacz', _href=URL('wizyta', 'show')))]
     )
     return locals()
 
