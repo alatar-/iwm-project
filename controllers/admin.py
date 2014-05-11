@@ -81,7 +81,7 @@ def konta():
                 ),
                 dict(
                     header='Dodaj wizytę',
-                    body=lambda row: A('dodaj', _href=URL("pacjent", "nowa_wizyta", args=[row.id]))
+                    body=lambda row: A('dodaj', _href=URL("pacjent", "nowa_wizyta", vars={'patient_id':row.id}))
                 )
             ]
         )

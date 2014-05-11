@@ -28,7 +28,8 @@ def moje_wizyty():
     if( auth.has_membership('pacjent') ):
         pacjentId = auth.user_id
     else:
-        pacjentId = request.args(0)
+        if request.args(0):
+            pacjentId = request.args(0)
     grid = SQLFORM.grid((db.visit.id_patient == pacjentId) & (db.visit.visit_day >= request.now.isoformat()),
         user_signature=False,
         editable=True,
@@ -42,9 +43,11 @@ def moje_wizyty():
     )
     return locals()
 
-@auth.requires_membership('pacjent')
+@auth.requires(auth.has_membership('pacjent') or auth.has_membership('admin'))
 def nowa_wizyta():
-
+    if not(session.patient) and not(auth.has_membership('pacjent')):
+        if 'patient_id' in request.vars.keys():
+            session.patient = int(request.vars['patient_id'])
     ####### 4th level
     if request.args(2):
         grid3 = {}
@@ -160,7 +163,7 @@ def nowa_wizyta():
     return locals()
 
 
-@auth.requires_membership('pacjent')
+@auth.requires(auth.has_membership('pacjent') or auth.has_membership('admin'))
 def szukaj():
     drugi = ''
     map = {'Monday': "Poniedziałek", "Tuesday": "Wtorek", "Wednesday": "Środa", "Thursday": "Czwartek",
@@ -231,13 +234,14 @@ def szukaj():
 
     redirect(URL('nowa_wizyta', args=[request.args(0), drugi, date]))
 
-@auth.requires_membership('pacjent')
+@auth.requires(auth.has_membership('pacjent') or auth.has_membership('admin'))
 def dodaj():
     db.visit.insert(
-        id_patient=auth.user_id,
+        id_patient=session.patient if session.patient else auth.user_id,
         id_doctor=request.args(1),
         visit_day=request.args(2),
         visit_hour=(request.args(3) + ':' + request.args(4)),
     )
-
-    redirect(URL('moje_wizyty'))
+    patient_id = session.patient
+    session.patient = None
+    redirect(URL('moje_wizyty', args=patient_id))
