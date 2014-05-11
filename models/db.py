@@ -95,6 +95,21 @@ db.define_table('visit',
     Field('description', 'text', length=1000),
 )
 
+db.define_table(
+    'drug',
+    Field('name'),
+    Field('ingredients'),
+    Field('form'),
+    Field('dose'),
+    Field('package_size'),
+    Field('availability'),
+    Field('ean'),
+    Field('mah'),
+    Field('authorization_number'),
+    Field('producer'),
+    Field('origin_country')
+)
+
 # db.children.department.requires = IS_IN_DB(db, db.parent.id, '%(name)s')
 
 # db.office_hours.office_end.requires.append()
