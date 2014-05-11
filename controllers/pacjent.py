@@ -94,8 +94,8 @@ def nowa_wizyta():
 
         if request.args(1):
             query2 = (
-                db.office_hours.id_department == request.args(0)) &
-                (db.office_hours.id_doctor == request.args(1)
+                (db.office_hours.id_department == request.args(0)) &
+		(db.office_hours.id_doctor == request.args(1))
             )
 
         db.auth_user.id.readable = False
