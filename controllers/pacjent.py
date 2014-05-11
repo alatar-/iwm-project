@@ -23,12 +23,13 @@ def dane_kontaktowe():
     return locals()
 
 
-@auth.requires_membership('pacjent')
+@auth.requires( auth.has_membership('pacjent') or auth.has_membership('admin') )
 def moje_wizyty():
-
-    db.visit.id.readable = False
-    grid = SQLFORM.grid(
-        (db.visit.id_patient == auth.user_id) & (db.visit.visit_day >= request.now.isoformat()),
+    if( auth.has_membership('pacjent') ):
+        pacjentId = auth.user_id
+    else:
+        pacjentId = request.args(0)
+    grid = SQLFORM.grid((db.visit.id_patient == pacjentId) & (db.visit.visit_day >= request.now.isoformat()),
         user_signature=False,
         editable=True,
         deletable=False,

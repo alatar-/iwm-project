@@ -20,9 +20,9 @@ if auth.user:
         ]
     elif auth.has_membership(3):
         response.menu = [
-            ('Aktywacja', False, URL('admin', 'index')),
-            ('Poradnie', False, URL('admin', 'poradnie')),
+            ('Aktywacja Pacjentów', False, URL('admin', 'index')),
             ('Pacjenci', False, URL('admin', 'konta', args='pacjent')),
+            ('Poradnie', False, URL('admin', 'poradnie')),
             ('Lekarze', False, URL('admin', 'konta', args='lekarz')),
-            ('Admini', False, URL('admin', 'konta', args='admin'))
+            ('Personel Rejestracji', False, URL('admin', 'konta', args='admin'))
         ]

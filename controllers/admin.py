@@ -70,13 +70,20 @@ def konta():
             user_signature=False, 
             args=[type_],
             oncreate=lambda form: auth.add_membership(type_, db(db.auth_user.email == form.vars.email).select().first().id),
-            links=[dict(
-                header='',
-                body=lambda row: A(
-                    'osoby kontaktowe',
-                    _href=URL('osoby_kontaktowe', args=[row.id])
+            links=[
+                dict(
+                    header='Osoby kontaktowe',
+                    body=lambda row: A('osoby kontaktowe', _href=URL('osoby_kontaktowe', args=[row.id]))
+                ),
+                dict(
+                    header='Historia wizyt',
+                    body=lambda row: A('historia', _href=URL("pacjent", "moje_wizyty", args=[row.id]))
+                ),
+                dict(
+                    header='Dodaj wizytę',
+                    body=lambda row: A('dodaj', _href=URL("pacjent", "nowa_wizyta", args=[row.id]))
                 )
-            )],
+            ]
         )
     else:
         grid = SQLFORM.grid(
