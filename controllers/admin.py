@@ -58,7 +58,7 @@ def poradnie():
     grid = SQLFORM.grid(db.department)
     return locals()
 
-@auth.requires_membership('admin')
+@auth.requires(auth.has_membership('admin') or auth.has_membership('lekarz'))  
 def konta():
     type_ = request.args(0)
     db.auth_user.user_type.default = type_

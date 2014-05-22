@@ -24,6 +24,7 @@ patient_extra_fields = [
     Field('identity_id', length=9, requires=[IS_NOT_EMPTY(), IS_MATCH('^[A-Z]{3}\d{6}?$', error_message='błędny number dowodu')]),
     Field('nip', length=13, requires=[IS_MATCH('^\d{3}-\d{3}-\d{2}-\d{2}?$', error_message='błędny number nip')]),
     Field('phone_numer', length=11, requires=[IS_NOT_EMPTY(), IS_MATCH('^\d{11}?$', error_message='błędny number telefonu')]),
+    Field('nn_patient', 'boolean')
     # dane kontaktowe, osobna tabela
 ]
 
@@ -87,14 +88,6 @@ db.define_table('office_hours',
     Field('id_department', 'reference department')
 )
 
-db.define_table('visit',
-    Field('id_patient', 'reference auth_user'),
-    Field('id_doctor', 'reference auth_user'),
-    Field('visit_day', 'date', requires=IS_NOT_EMPTY()),
-    Field('visit_hour', length=5, requires=IS_NOT_EMPTY()),
-    Field('description', 'text', length=1000),
-)
-
 db.define_table(
     'drug',
     Field('name'),
@@ -107,8 +100,20 @@ db.define_table(
     Field('mah'),
     Field('authorization_number'),
     Field('producer'),
-    Field('origin_country')
+    Field('origin_country'),
+    format = '%(name)s %(form)s %(dose)s'
+) 
+
+db.define_table('visit',
+    Field('id_patient', 'reference auth_user'),
+    Field('id_doctor', 'reference auth_user'),
+    Field('visit_day', 'date', requires=IS_NOT_EMPTY()),
+    Field('visit_hour', length=5, requires=IS_NOT_EMPTY()),
+    Field('description', 'text', length=1000),
+    Field('drugs', 'list:reference drug')
 )
+
+
 
 # db.children.department.requires = IS_IN_DB(db, db.parent.id, '%(name)s')
 

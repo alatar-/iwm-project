@@ -16,6 +16,7 @@ if auth.user:
     elif auth.has_membership(2):
         response.menu = [
             ('Najbliższe wizyty', False, URL('lekarz', 'wizyty')),
+            ('Pacjenci', False, URL('admin', 'konta', args='pacjent')),
             ('Plan pracy', False, URL('lekarz', 'plan'))
         ]
     elif auth.has_membership(3):
