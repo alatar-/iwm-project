@@ -190,6 +190,7 @@
 'Password': 'Hasło',
 "Password fields don't match": 'Pola hasła nie są zgodne ze sobą',
 'Pesel': 'Pesel',
+'Phone Number': 'Phone Number',
 'Phone Numer': 'Phone Numer',
 'please input your password again': 'please input your password again',
 'Plugins': 'Plugins',

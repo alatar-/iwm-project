@@ -1,0 +1,7 @@
+ol, ul {
+	list-style: none;
+}
+
+.parsley-errors-list {
+	color: red;
+}

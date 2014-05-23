@@ -15,15 +15,15 @@ ISO_GENDER = ['mężczyzna', 'kobieta', 'nieznana', 'nie dotyczy']
 
 # ----------
 patient_extra_fields = [
-    Field('pesel', 'integer', length=16, requires=[IS_NOT_EMPTY(), IS_LENGTH(11, 11, error_message='pesel ma długość 11!')]),
-    Field('address', length=128, requires=[IS_NOT_EMPTY()]),
-    Field('city', length=128, requires=[IS_NOT_EMPTY(), IS_ALPHANUMERIC(error_message='tylko znaki alfanumeryczne!')]),
-    Field('zip', length=8, requires=[IS_NOT_EMPTY(), IS_MATCH('^\d{2}-\d{3}?$', error_message='błędny kod pocztowy')]),
-    Field('gender', length=20, requires=[IS_IN_SET(ISO_GENDER)]),
-    Field('born_city', length=128, requires=[IS_NOT_EMPTY(), IS_ALPHANUMERIC(error_message='tylko znaki alfanumeryczne!')]),
-    Field('identity_id', length=9, requires=[IS_NOT_EMPTY(), IS_MATCH('^[A-Z]{3}\d{6}?$', error_message='błędny number dowodu')]),
-    Field('nip', length=13, requires=[IS_MATCH('^\d{3}-\d{3}-\d{2}-\d{2}?$', error_message='błędny number nip')]),
-    Field('phone_numer', length=11, requires=[IS_NOT_EMPTY(), IS_MATCH('^\d{11}?$', error_message='błędny number telefonu')]),
+    Field('pesel', length=16), #, requires=[IS_NOT_EMPTY(), IS_LENGTH(11, 11, error_message='pesel ma długość 11!')]),
+    Field('address', length=128), #, requires=[IS_NOT_EMPTY()]),
+    Field('city', length=128), #, requires=[IS_NOT_EMPTY(), IS_ALPHANUMERIC(error_message='tylko znaki alfanumeryczne!')]),
+    Field('zip', length=8),#, requires=[IS_NOT_EMPTY(), IS_MATCH('^\d{2}-\d{3}?$', error_message='błędny kod pocztowy')]),
+    Field('gender', length=20),#, requires=[IS_IN_SET(ISO_GENDER)]),
+    Field('born_city', length=128),#, requires=[IS_NOT_EMPTY(), IS_ALPHANUMERIC(error_message='tylko znaki alfanumeryczne!')]),
+    Field('identity_id', length=9),#, requires=[IS_NOT_EMPTY(), IS_MATCH('^[A-Z]{3}\d{6}?$', error_message='błędny number dowodu')]),
+    Field('nip', length=13),#, requires=[IS_MATCH('^\d{3}-\d{3}-\d{2}-\d{2}?$', error_message='błędny number nip')]),
+    Field('phone_number', length=11),#, requires=[IS_NOT_EMPTY(), IS_MATCH('^\d{11}?$', error_message='błędny number telefonu')]),
     Field('nn_patient', 'boolean')
     # dane kontaktowe, osobna tabela
 ]
@@ -42,9 +42,9 @@ auth.settings.extra_fields['auth_user'] = ([
 )
 auth.define_tables(username=False, signature=False)
 
-db.auth_user.first_name.requires=[IS_NOT_EMPTY(), IS_MATCH('^[A-Z][a-z]*$', error_message='jedno słowo, z dużej litery, alfanumeryczne')]
-db.auth_user.last_name.requires=[IS_NOT_EMPTY(), IS_MATCH('^[A-Z][A-z\-]*$', error_message='jedno słowo, z dużej litery, alfanumeryczne')]
-db.auth_user.pesel.requires.append(IS_NOT_IN_DB(db, db.auth_user.pesel))
+#db.auth_user.first_name.requires=[IS_NOT_EMPTY(), IS_MATCH('^[A-Z][a-z]*$', error_message='jedno słowo, z dużej litery, alfanumeryczne')]
+#db.auth_user.last_name.requires=[IS_NOT_EMPTY(), IS_MATCH('^[A-Z][A-z\-]*$', error_message='jedno słowo, z dużej litery, alfanumeryczne')]
+#db.auth_user.pesel.requires.append(IS_NOT_IN_DB(db, db.auth_user.pesel))
 
 auth.settings.create_user_groups = False
 auth.settings.registration_requires_verification = False
