@@ -171,6 +171,7 @@
 'New Search': 'New Search',
 'next %s rows': 'next %s rows',
 'next 100 rows': 'następne 100 wierszy',
+'Nie może być puste': 'Nie może być puste',
 'Nip': 'Nip',
 'Nn Patient': 'Nn Patient',
 'No databases in this application': 'Brak baz danych w tej aplikacji',
