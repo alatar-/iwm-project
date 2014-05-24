@@ -1,0 +1,12 @@
+	
+	/* multiselect styles */
+	.multiselect {
+		width: 800px;
+		height: 400px;
+	}
+	
+	#switcher {
+		margin-top: 20px;
+	}
+	
+	form {margin: 0; padding: 0;}

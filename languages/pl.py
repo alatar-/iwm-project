@@ -251,6 +251,7 @@
 'Time in Cache (h:m:s)': 'Time in Cache (h:m:s)',
 'Timestamp': 'Znacznik czasu',
 'Too short': 'Too short',
+'Treatment': 'Treatment',
 'TSV (Spreadsheets)': 'TSV (Spreadsheets)',
 'TSV (Spreadsheets, hidden cols)': 'TSV (Spreadsheets, hidden cols)',
 'Twitter': 'Twitter',

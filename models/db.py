@@ -110,8 +110,10 @@ db.define_table('visit',
     Field('visit_day', 'date', requires=IS_NOT_EMPTY()),
     Field('visit_hour', length=5, requires=IS_NOT_EMPTY()),
     Field('description', 'text', length=1000),
+    Field('treatment', 'text', length=2000),
     Field('drugs', 'list:reference drug')
 )
+db.visit.drugs.widget = SQLFORM.widgets.options.widget
 
 
 

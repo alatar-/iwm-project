@@ -64,6 +64,8 @@
        uncomment to load jquery-ui //-->
   <noscript><link href="{{=URL('static', 'css/web2py_bootstrap_nojs.css')}}" rel="stylesheet" type="text/css" /></noscript>
   {{block head}}{{end}}
+  <link rel="stylesheet" href="{{=URL('static', 'css/common.css')}}">
+  <link rel="stylesheet" href="{{=URL('static', 'css/ui.multiselect.css')}}">
 </head>
 
 <body>
@@ -155,10 +157,13 @@
   <script src="{{=URL('static','js/jquery.js')}}"></script>
   <script src="{{=URL('static','js/parsley.min.js')}}"></script>
   <script src="{{=URL('static','js/pl.js')}}"></script>
+  <script src="{{=URL('static','js/jquery-ui-1.10.4.min.js')}}"></script>
+  <script src="{{=URL('static','js/ui.multiselect.js')}}"></script>
   <script>
     window.ParsleyValidator.setLocale('pl');
   </script>
   <script src="{{=URL('static','js/validation.js')}}"></script>
+  <script src="{{=URL('static','js/mselect.js')}}"></script>
   <!--[if lt IE 7 ]>
       <script src="{{=URL('static','js/dd_belatedpng.js')}}"></script>
       <script> DD_belatedPNG.fix('img, .png_bg'); //fix any <img> or .png_bg background-images </script>

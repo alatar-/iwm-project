@@ -8,11 +8,11 @@ def index():
 def wizyty():
     # |
     grid = SQLFORM.grid(
-        (db.visit.id_doctor == auth.user_id) & (db.visit.visit_day >= request.now.isoformat()),
+        (db.visit.id_doctor == auth.user_id) & (db.visit.visit_day >= request.now.date),
         user_signature=False,
-        editable=False,
+        editable=True,
         deletable=False,
-        details=False,
+        details=True,
         create=False,
         left=db.visit.on(db.visit.id_patient == db.auth_user.id),
         fields=[db.visit.visit_day, db.visit.visit_hour, db.auth_user.first_name,  db.auth_user.last_name, db.auth_user.pesel],
