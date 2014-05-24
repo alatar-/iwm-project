@@ -26,7 +26,7 @@
                     <td>{{=key[1]}}</td>
                     <td>{{=key[0]}}</td>
                     <td>{{=hour}}</td>
-                    <td>[ {{=A('wybierz', _href=URL('pacjent', 'dodaj', args=[key[2], key[3], key[1], hour[0:2], hour[3:5] ]))}} ]</td>
+                    <td>[ {{=A('wybierz', _href=URL('pacjent', 'nowa_wizyta', args=[key[2], key[3], key[1], hour[0:2], hour[3:5] ]))}} ]</td>
                 </tr>
             {{pass}}
         {{pass}}
@@ -37,5 +37,10 @@
         {{pass}}
         </table>
     {{pass}}
+{{pass}}
+{{if request.args(4):}}
+<h2>Przyczyna wizyty:</h2>
+{{=reason}}
+{{=a}}
 {{pass}}
 

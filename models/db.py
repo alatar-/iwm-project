@@ -104,16 +104,30 @@ db.define_table(
     format = '%(name)s %(form)s %(dose)s'
 ) 
 
+
+db.define_table(
+    'med_procedure',
+    Field('category'),
+    Field('title'),
+    Field('subcategory'),
+    Field('detail'),
+    format = '%(category)s %(title)s %(subcategory)s %(detail)s'
+) 
+
+
 db.define_table('visit',
     Field('id_patient', 'reference auth_user'),
     Field('id_doctor', 'reference auth_user'),
     Field('visit_day', 'date', requires=IS_NOT_EMPTY()),
     Field('visit_hour', length=5, requires=IS_NOT_EMPTY()),
+    Field('reason'),
     Field('description', 'text', length=1000),
     Field('treatment', 'text', length=2000),
+    Field('med_procedures', 'list:reference med_procedure'),
     Field('drugs', 'list:reference drug')
 )
-db.visit.drugs.widget = SQLFORM.widgets.options.widget
+db.visit.drugs.widget = SQLFORM.widgets.multiple.widget
+db.visit.med_procedures.widget = SQLFORM.widgets.multiple.widget
 
 
 

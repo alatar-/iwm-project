@@ -38,7 +38,7 @@ def moje_wizyty():
         details=True,
         create=False,
         left=db.visit.on(db.visit.id_doctor == db.auth_user.id),
-        fields=[db.visit.visit_day, db.visit.visit_hour, db.auth_user.first_name,  db.auth_user.last_name, db.visit.description],
+        fields=[db.visit.visit_day, db.visit.visit_hour, db.auth_user.first_name,  db.auth_user.last_name, db.visit.reason],
         orderby=db.visit.visit_day|db.visit.visit_hour,
         csv=False,
     )
@@ -49,7 +49,7 @@ def moje_wizyty():
         details=True,
         create=False,
         left=db.visit.on(db.visit.id_doctor == db.auth_user.id),
-        fields=[db.visit.visit_day, db.visit.visit_hour, db.auth_user.first_name,  db.auth_user.last_name, db.visit.description],
+        fields=[db.visit.visit_day, db.visit.visit_hour, db.auth_user.first_name,  db.auth_user.last_name, db.visit.reason],
         orderby=db.visit.visit_day|db.visit.visit_hour,
         csv=False,
     )
@@ -60,7 +60,7 @@ def moje_wizyty():
         details=True,
         create=False,
         left=db.visit.on(db.visit.id_doctor == db.auth_user.id),
-        fields=[db.visit.visit_day, db.visit.visit_hour, db.auth_user.first_name,  db.auth_user.last_name, db.visit.description],
+        fields=[db.visit.visit_day, db.visit.visit_hour, db.auth_user.first_name,  db.auth_user.last_name, db.visit.reason],
         orderby=db.visit.visit_day|db.visit.visit_hour,
         csv=False,
         links=[dict(header='', body=lambda row: A('zobacz', _href=URL('wizyta', 'show')))]
@@ -72,6 +72,12 @@ def nowa_wizyta():
     if not(session.patient) and not(auth.has_membership('pacjent')):
         if 'patient_id' in request.vars.keys():
             session.patient = int(request.vars['patient_id'])
+
+    if(request.args(4)):
+        reason = FORM(INPUT(_name='Reason', requires=IS_NOT_EMPTY()), INPUT(_type='submit', _value="Rejestruj"))
+        a = request.args
+        if reason.process().accepted:
+            dodaj(a, request.vars["Reason"])
     ####### 4th level
     if request.args(2):
         grid3 = {}
@@ -125,7 +131,6 @@ def nowa_wizyta():
                 (db.office_hours.id_department == request.args(0)) &
 		(db.office_hours.id_doctor == request.args(1))
             )
-
         db.auth_user.id.readable = False
         grid2 = SQLFORM.grid(
             query=query2,
@@ -259,12 +264,13 @@ def szukaj():
     redirect(URL('nowa_wizyta', args=[request.args(0), drugi, date]))
 
 @auth.requires(auth.has_membership('pacjent') or auth.has_membership('admin') or auth.has_membership('lekarz'))
-def dodaj():
+def dodaj(in_a, in_reason):
     db.visit.insert(
         id_patient=session.patient if session.patient else auth.user_id,
-        id_doctor=request.args(1),
-        visit_day=request.args(2),
-        visit_hour=(request.args(3) + ':' + request.args(4)),
+        id_doctor=in_a(1),
+        visit_day=in_a(2),
+        visit_hour=(in_a(3) + ':' + in_a(4)),
+        reason=in_reason
     )
     patient_id = session.patient
     session.patient = None
