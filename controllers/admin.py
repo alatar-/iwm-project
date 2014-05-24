@@ -65,6 +65,7 @@ def konta():
     remove_extra_fields(type_)
 
     if type_ == 'pacjent':
+        db.auth_user.nn_patient.readable = db.auth_user.nn_patient.readable = False
         grid = SQLFORM.grid(
             db.auth_user.user_type == type_,
             user_signature=False, 

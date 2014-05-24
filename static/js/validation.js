@@ -1,3 +1,8 @@
+function get(name){
+   if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+      return decodeURIComponent(name[1]);
+}
+
 $(document).ready(
 	function() {
 		idArray = ["first_name", "last_name", "email", "password", "pesel", "address", "city", "zip", "gender", "born_city", "identity_id", "nip", "phone_number", "nn_patient" ];
@@ -18,7 +23,7 @@ $(document).ready(
 		$("#"+prefix+"pesel").attr({"data-parsley-pattern":"^[0-9]{11}$", "data-parsley-required":"true","data-parsley-group":"patient"});
 		$("#"+prefix+"pesel").after("<ul class=\"parsley-errors-list\"></ul>");
 
-		$("#"+prefix+"address").attr({"data-parsley-type":"alphanum", "data-parsley-required":"true","data-parsley-group":"patient"});
+		$("#"+prefix+"address").attr({"data-parsley-type":"^[0-9A-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ. ]+$", "data-parsley-required":"true","data-parsley-group":"patient"});
 		$("#"+prefix+"address").after("<ul class=\"parsley-errors-list\"></ul>");
 
 		$("#"+prefix+"city").attr({"data-parsley-pattern":"^[A-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*$", "data-parsley-required":"true","data-parsley-group":"patient"});
@@ -43,7 +48,7 @@ $(document).ready(
 		$("#"+prefix+"phone_number").after("<ul class=\"parsley-errors-list\"></ul>");
 
 		$("#"+prefix+"nn_patient").before("<p>");
-		$("#"+prefix+"nn_patient").attr({"data-parsley-mincheck":"1", "data-parsley-group":"nn_patient"});
+		$("#"+prefix+"nn_patient").attr({"data-parsley-check":"[1,1]", "data-parsley-group":"nn_patient"});
 		$("#"+prefix+"nn_patient").after("<ul class=\"parsley-errors-list\"></ul>");
 		$("#"+prefix+"nn_patient").after("<p>");
 		$("form").parsley({trigger: "click focus mousedown focusin focusout change keyup"});
@@ -51,8 +56,12 @@ $(document).ready(
 		$("form").parsley().subscribe('parsley:form:validate', function (formInstance) {
 		    // if one of these blocks is not failing do not prevent submission
 		    // we use here group validation with option force (validate even non required fields)
-		    if (formInstance.isValid("patient", true, checked) || formInstance.isValid("nn_patient", true, checked))
+		    if (formInstance.isValid("patient", true, checked) || formInstance.isValid("nn_patient", true, checked)) {
+		    	$("form").parsley().destroy();
+				$("form").submit();
 			    return true;
+		    }
+			    
 		    // else stop form submission
 		    else if(checked == 0) {
 		    	checked = 1;
