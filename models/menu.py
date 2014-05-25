@@ -25,5 +25,6 @@ if auth.user:
             ('Pacjenci', False, URL('admin', 'konta', args='pacjent')),
             ('Poradnie', False, URL('admin', 'poradnie')),
             ('Lekarze', False, URL('admin', 'konta', args='lekarz')),
-            ('Personel Rejestracji', False, URL('admin', 'konta', args='admin'))
+            ('Personel Rejestracji', False, URL('admin', 'konta', args='admin')),
+            ('Powiadomienia SMS', False, URL('admin', 'powiadomienia')),
         ]

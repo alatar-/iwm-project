@@ -168,6 +168,13 @@ db.visit.treatment.label = T('Zalecenia lekarskie')
 db.visit.med_procedures.label = T('Procedury ICD-9')
 db.visit.drugs.label = T('Zalecone leki')
 
+db.define_table(
+    'powiadomienia',
+    Field('godzina'),# length=5, requires=[IS_NOT_EMPTY(), IS_MATCH('^\d{2}:\d{2}?$', error_message='błędny kod pocztowy')]),
+    Field('wyprzedzenie', 'integer'),# length=2, requires=[IS_NOT_EMPTY()]),
+    Field('status', 'integer'),
+) 
+
 # db.children.department.requires = IS_IN_DB(db, db.parent.id, '%(name)s')
 
 # db.office_hours.office_end.requires.append()

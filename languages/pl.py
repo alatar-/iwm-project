@@ -319,6 +319,7 @@
 'Welcome to web2py!': 'Welcome to web2py!',
 'Which called the function %s located in the file %s': 'Which called the function %s located in the file %s',
 'Working...': 'Working...',
+'Wyprzedzenie': 'Wyprzedzenie',
 'XML': 'XML',
 'XML export of columns shown': 'XML export of columns shown',
 'You are successfully running web2py': 'You are successfully running web2py',
