@@ -1,7 +1,14 @@
 {{extend 'layout.html'}}
+{{if not request.args(1):}}
 <h3>wizyty dzisiaj:</h3>
+{{pass}}
+{{if request.args(1):}}
+<h3>szczegóły wizyty:</h3>
+{{pass}}
 {{=grid}}
+{{if not request.args(1):}}
 <h3>umówione wizyty:</h3>
 {{=grid1}}
 <h3>archiwum wizyt:</h3>
 {{=grid2}}
+{{pass}}
