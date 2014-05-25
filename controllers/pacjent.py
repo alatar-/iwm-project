@@ -6,21 +6,44 @@ import datetime
 def index():
     redirect('moje_wizyty')
 
-@auth.requires( auth.has_membership('pacjent'))
+@auth.requires( auth.has_membership('pacjent') or auth.has_membership('admin') or auth.has_membership('lekarz'))
 def dane_kontaktowe():
+    if( auth.has_membership('pacjent') ):
+        pacjentId = auth.user_id
+    else:
+        if request.args(0):
+            pacjentId = request.args(0)
+    session.patient = pacjentId
     db.contacts.id_patient.readable = db.contacts.id_patient.writable = False
     db.contacts.id.readable = db.contacts.id.writable = False
     db.contacts.id_patient.default = auth.user_id
     grid = SQLFORM.grid(
-        db.contacts.id_patient == request.args(0),
+        db.contacts.id_patient == pacjentId,
         user_signature=False,
         editable=True,
         deletable=True,
         details=False,
-        create=True,
+        create=False,
         csv=False,
     )
     return locals()
+
+@auth.requires( auth.has_membership('pacjent') or auth.has_membership('admin') or auth.has_membership('lekarz'))
+def dodaj_kontakt():
+    if (not session.patient):
+        redirect(URL('dane_kontaktowe'))
+    return locals() 
+
+@auth.requires( auth.has_membership('pacjent') or auth.has_membership('admin') or auth.has_membership('lekarz'))
+def save_contact():
+    pacjentId = session.patient
+    db.contacts.insert(
+        id_patient=pacjentId,
+        name=request.vars["name"],
+        surname=request.vars["surname"],
+        phone_numer=request.vars["phone_numer"]
+    )
+    redirect(URL("dane_kontaktowe", args=[pacjentId]))    
 
 
 @auth.requires( auth.has_membership('pacjent') or auth.has_membership('admin') or auth.has_membership('lekarz'))
