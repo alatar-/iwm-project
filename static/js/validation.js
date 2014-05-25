@@ -7,6 +7,7 @@ $(document).ready(
 	function() {
 		idArray = ["first_name", "last_name", "email", "password", "pesel", "address", "city", "zip", "gender", "born_city", "identity_id", "nip", "phone_number", "nn_patient" ];
 		var prefix = "auth_user_";
+		var prefix_contact = "contacts_";
 
 		$("#"+prefix+"first_name").attr({"data-parsley-pattern":"^[A-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*$", "data-parsley-required":"true", "data-parsley-group":"patient"});
 		$("#"+prefix+"first_name").after("<ul class=\"parsley-errors-list\"></ul>");
@@ -51,6 +52,17 @@ $(document).ready(
 		$("#"+prefix+"nn_patient").attr({"data-parsley-check":"[1,1]", "data-parsley-group":"nn_patient"});
 		$("#"+prefix+"nn_patient").after("<ul class=\"parsley-errors-list\"></ul>");
 		$("#"+prefix+"nn_patient").after("<p>");
+
+		$("#"+prefix_contact+"name").attr({"data-parsley-pattern":"^[A-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*$", "data-parsley-required":"true", "data-parsley-group":"patient"});
+		$("#"+prefix_contact+"name").after("<ul class=\"parsley-errors-list\"></ul>");
+
+		$("#"+prefix_contact+"surname").attr({"data-parsley-pattern":"^([A-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*)(-[A-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*)?$", "data-parsley-required":"true", "data-parsley-group":"patient"});
+		$("#"+prefix_contact+"surname").after("<ul class=\"parsley-errors-list\"></ul>");
+
+
+		$("#"+prefix_contact+"phone_numer").attr({"data-parsley-pattern":"^(([+]|[0]{2})[0-9]{2})?[0-9]{9}$", "data-parsley-required":"true", "data-parsley-group":"patient"});
+		$("#"+prefix_contact+"phone_numer").after("<ul class=\"parsley-errors-list\"></ul>");
+
 		$("form").parsley({trigger: "click focus mousedown focusin focusout change keyup"});
 		checked = 0;
 		$("form").parsley().subscribe('parsley:form:validate', function (formInstance) {

@@ -42,6 +42,15 @@ auth.settings.extra_fields['auth_user'] = ([
 )
 auth.define_tables(username=False, signature=False)
 
+db.auth_user.pesel.label = T('Pesel')
+db.auth_user.address.label = T('Adres')
+db.auth_user.city.label = T('Miasto')
+db.auth_user.zip.label = T('Kod pocztowy')
+db.auth_user.gender.label = T('Płeć')
+db.auth_user.born_city.label = T('Miejsce urodzenia')
+db.auth_user.identity_id.label = T('Nr dowodu')
+db.auth_user.phone_number.label = T('Telefon')
+db.auth_user.nn_patient.label = T('Pancjent-NN')
 #db.auth_user.first_name.requires=[IS_NOT_EMPTY(), IS_MATCH('^[A-Z][a-z]*$', error_message='jedno słowo, z dużej litery, alfanumeryczne')]
 #db.auth_user.last_name.requires=[IS_NOT_EMPTY(), IS_MATCH('^[A-Z][A-z\-]*$', error_message='jedno słowo, z dużej litery, alfanumeryczne')]
 #db.auth_user.pesel.requires.append(IS_NOT_IN_DB(db, db.auth_user.pesel))
@@ -73,6 +82,11 @@ db.define_table('contacts',
     Field('surname', length=30), #, requires=[IS_NOT_EMPTY(), IS_ALPHANUMERIC(error_message='tylko znaki alfanumeryczne!')]),
     Field('phone_numer', length=15) #, requires=[IS_NOT_EMPTY(), IS_MATCH('^\d{11}?$', error_message='błędny number telefonu')]),
 )
+db.contacts.id_patient.label = T('Id pacjenta')
+db.contacts.name.label = T('Imię')
+db.contacts.surname.label = T('Nazwisko')
+db.contacts.phone_numer.label = T('Telefon')
+
 
 db.define_table('department',
     Field('name', requires=[IS_NOT_EMPTY()]),
@@ -87,6 +101,12 @@ db.define_table('office_hours',
     Field('id_doctor', 'reference auth_user'),
     Field('id_department', 'reference department')
 )
+
+db.office_hours.week_day.label = T('Dzień tygodnia')
+db.office_hours.office_begin.label = T('Przyjmuje od')
+db.office_hours.office_end.label = T('Przyjmuje do')
+db.office_hours.id_doctor.label = T('Lekarz')
+db.office_hours.id_department.label = T('Oddział')
 
 db.define_table(
     'drug',
@@ -103,6 +123,17 @@ db.define_table(
     Field('origin_country'),
     format = '%(name)s %(form)s %(dose)s'
 ) 
+db.drug.name.label=T('Nazwa')
+db.drug.ingredients.label=T('Składniki')
+db.drug.form.label=T('Forma')
+db.drug.dose.label=T('Dawka')
+db.drug.package_size.label=T('Rozmiar opakowania')
+db.drug.availability.label=T('Dostępność')
+db.drug.ean.label=T('Kod EAN')
+db.drug.mah.label=T('Mah')
+db.drug.authorization_number.label=T('Nr pozwolenia')
+db.drug.producer.label=T('Producent')
+db.drug.origin_country.label=T('Kraj pochodzenia')
 
 
 db.define_table(
@@ -127,7 +158,15 @@ db.define_table('visit',
 db.visit.drugs.widget = SQLFORM.widgets.multiple.widget
 db.visit.med_procedures.widget = SQLFORM.widgets.multiple.widget
 
-
+db.visit.id_patient.label = T('Pacjent')
+db.visit.id_doctor.label = T('Lekarz')
+db.visit.visit_day.label = T('Dzień wizyty')
+db.visit.visit_hour.label = T('Godzina')
+db.visit.reason.label = T('Powód wizyty')
+db.visit.description.label = T('Opis przypadku')
+db.visit.treatment.label = T('Zalecenia lekarskie')
+db.visit.med_procedures.label = T('Procedury ICD-9')
+db.visit.drugs.label = T('Zalecone leki')
 
 # db.children.department.requires = IS_IN_DB(db, db.parent.id, '%(name)s')
 
