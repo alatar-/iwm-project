@@ -6,13 +6,13 @@ import datetime
 def index():
     redirect('moje_wizyty')
 
-@auth.requires_membership('pacjent')
+@auth.requires( auth.has_membership('pacjent'))
 def dane_kontaktowe():
     db.contacts.id_patient.readable = db.contacts.id_patient.writable = False
     db.contacts.id.readable = db.contacts.id.writable = False
     db.contacts.id_patient.default = auth.user_id
     grid = SQLFORM.grid(
-        db.contacts.id_patient == auth.user_id,
+        db.contacts.id_patient == request.args(0),
         user_signature=False,
         editable=True,
         deletable=True,
@@ -30,6 +30,7 @@ def moje_wizyty():
     else:
         if request.args(0):
             pacjentId = request.args(0)
+    db.visit.id_patient.writable = db.visit.id_doctor.writable = db.visit.visit_day.writable = db.visit.visit_hour.writable = False
     grid = SQLFORM.grid((db.visit.id_patient == pacjentId) & (db.visit.visit_day == request.now.date),
         user_signature=False,
         editable=True,

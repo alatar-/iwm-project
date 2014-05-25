@@ -4,7 +4,7 @@ p2
 (dp3
 S'length'
 p4
-I11
+I15
 sS'unique'
 p5
 I00
@@ -13,7 +13,7 @@ p6
 I18
 sS'sql'
 p7
-S'CHAR(11)'
+S'CHAR(15)'
 p8
 sS'notnull'
 p9

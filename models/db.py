@@ -23,7 +23,7 @@ patient_extra_fields = [
     Field('born_city', length=128),#, requires=[IS_NOT_EMPTY(), IS_ALPHANUMERIC(error_message='tylko znaki alfanumeryczne!')]),
     Field('identity_id', length=9),#, requires=[IS_NOT_EMPTY(), IS_MATCH('^[A-Z]{3}\d{6}?$', error_message='błędny number dowodu')]),
     Field('nip', length=13),#, requires=[IS_MATCH('^\d{3}-\d{3}-\d{2}-\d{2}?$', error_message='błędny number nip')]),
-    Field('phone_number', length=11),#, requires=[IS_NOT_EMPTY(), IS_MATCH('^\d{11}?$', error_message='błędny number telefonu')]),
+    Field('phone_number', length=15),#, requires=[IS_NOT_EMPTY(), IS_MATCH('^\d{11}?$', error_message='błędny number telefonu')]),
     Field('nn_patient', 'boolean')
     # dane kontaktowe, osobna tabela
 ]
@@ -69,9 +69,9 @@ def create_hours(start, end):
 
 db.define_table('contacts',
     Field('id_patient', 'reference auth_user'),
-    Field('name', length=30, requires=[IS_NOT_EMPTY(), IS_ALPHANUMERIC(error_message='tylko znaki alfanumeryczne!')]),
-    Field('surname', length=30, requires=[IS_NOT_EMPTY(), IS_ALPHANUMERIC(error_message='tylko znaki alfanumeryczne!')]),
-    Field('phone_numer', length=11, requires=[IS_NOT_EMPTY(), IS_MATCH('^\d{11}?$', error_message='błędny number telefonu')]),
+    Field('name', length=30), #, requires=[IS_NOT_EMPTY(), IS_ALPHANUMERIC(error_message='tylko znaki alfanumeryczne!')]),
+    Field('surname', length=30), #, requires=[IS_NOT_EMPTY(), IS_ALPHANUMERIC(error_message='tylko znaki alfanumeryczne!')]),
+    Field('phone_numer', length=15) #, requires=[IS_NOT_EMPTY(), IS_MATCH('^\d{11}?$', error_message='błędny number telefonu')]),
 )
 
 db.define_table('department',

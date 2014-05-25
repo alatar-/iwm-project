@@ -7,6 +7,7 @@ def index():
 @auth.requires_membership('lekarz')
 def wizyty():
     # |
+    db.visit.id_patient.writable = db.visit.id_doctor.writable = db.visit.visit_day.writable = db.visit.visit_hour.writable = False
     grid = SQLFORM.grid(
         (db.visit.id_doctor == auth.user_id) & (db.visit.visit_day >= request.now.date),
         user_signature=False,

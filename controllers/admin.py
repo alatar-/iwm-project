@@ -20,7 +20,7 @@ def index():
     )
     return locals()
 
-@auth.requires_membership('admin')
+@auth.requires(auth.has_membership('admin') or auth.has_membership('lekarz'))
 def osoby_kontaktowe():
     if not request.args(0):
         redirect('konta', 'pacjent')

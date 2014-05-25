@@ -11,7 +11,7 @@ $(document).ready(
 		$("#"+prefix+"first_name").attr({"data-parsley-pattern":"^[A-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*$", "data-parsley-required":"true", "data-parsley-group":"patient"});
 		$("#"+prefix+"first_name").after("<ul class=\"parsley-errors-list\"></ul>");
 
-		$("#"+prefix+"last_name").attr({"data-parsley-pattern":"^[A-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*$", "data-parsley-required":"true", "data-parsley-group":"patient"});
+		$("#"+prefix+"last_name").attr({"data-parsley-pattern":"^([A-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*)(-[A-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*)?$", "data-parsley-required":"true", "data-parsley-group":"patient"});
 		$("#"+prefix+"last_name").after("<ul class=\"parsley-errors-list\"></ul>");
 
 		$("#"+prefix+"email").attr({"data-parsley-type":"email", "data-parsley-required":"true","data-parsley-group":"patient"});
@@ -23,7 +23,7 @@ $(document).ready(
 		$("#"+prefix+"pesel").attr({"data-parsley-pattern":"^[0-9]{11}$", "data-parsley-required":"true","data-parsley-group":"patient"});
 		$("#"+prefix+"pesel").after("<ul class=\"parsley-errors-list\"></ul>");
 
-		$("#"+prefix+"address").attr({"data-parsley-type":"^[0-9A-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ. ]+$", "data-parsley-required":"true","data-parsley-group":"patient"});
+		$("#"+prefix+"address").attr({"data-parsley-presence":"true", "data-parsley-required":"true","data-parsley-group":"patient"});
 		$("#"+prefix+"address").after("<ul class=\"parsley-errors-list\"></ul>");
 
 		$("#"+prefix+"city").attr({"data-parsley-pattern":"^[A-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ][a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ ]*$", "data-parsley-required":"true","data-parsley-group":"patient"});
