@@ -122,7 +122,7 @@ def konta():
             links=[
                 dict(
                     header='Osoby kontaktowe',
-                    body=lambda row: A('osoby kontaktowe', _href=URL('osoby_kontaktowe', args=[row.id]))
+                    body=lambda row: A('osoby kontaktowe', _href=URL('pacjent', 'dane_kontaktowe', args=[row.id]))
                 ),
                 dict(
                     header='Historia wizyt',

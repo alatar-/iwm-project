@@ -137,6 +137,7 @@
 'Id': 'Id',
 'Id Department': 'Id Oddziału',
 'Id Doctor': 'Id Lekarza',
+'Id pacjenta': 'Id pacjenta',
 'Id Patient': 'Id Paacjenta',
 'Identity Id': 'Identity Id',
 'Imię': 'Imię',

@@ -1,0 +1,44 @@
+{{extend 'layout.html'}}
+<h2>Podaj dane osoby kontaktowej</h2>
+<form action="save_contact">
+<table>
+	<tbody>
+		
+		<tr id="contacts_name__row">
+			<td class="w2p_fl">
+				<label for="contacts_name" id="contacts_name__label">Imię: </label>
+			</td>
+			<td class="w2p_fw">
+				<input id="contacts_name" name="name" type="text" value="">
+			</td>
+		</tr>
+
+		<tr id="contacts_surname__row">
+			<td class="w2p_fl">
+				<label for="contacts_surname" id="contacts_surname__label">Nazwisko: </label>
+			</td>
+			<td class="w2p_fw">
+				<input id="contacts_surname" name="surname" type="text" value="">
+			</td>
+		</tr>
+
+		<tr id="contacts_phone_numer__row">
+			<td class="w2p_fl">
+				<label for="contacts_phone_numer" id="contacts_phone_numer__label">Telefon: </label>
+			</td>
+			<td class="w2p_fw">
+				<input id="contacts_phone_numer" name="phone_numer" type="text" value="">
+			</td>
+		</tr>
+
+		<tr id="submit_record__row">
+			<td class="w2p_fl"></td>
+			<td class="w2p_fw">
+				<input type="submit" value="Wyślij" class="btn">
+			</td>
+			<td class="w2p_fc"></td>
+		</tr>
+	</tbody>
+</table>
+
+</form>
