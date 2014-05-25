@@ -33,7 +33,7 @@ def moje_wizyty():
     db.visit.id_patient.writable = db.visit.id_doctor.writable = db.visit.visit_day.writable = db.visit.visit_hour.writable = False
     grid = SQLFORM.grid((db.visit.id_patient == pacjentId) & (db.visit.visit_day == request.now.date),
         user_signature=False,
-        editable=True,
+        editable=False,
         deletable=False,
         details=True,
         create=False,
@@ -45,7 +45,7 @@ def moje_wizyty():
     if(not request.args(1)):
         grid1 = SQLFORM.grid((db.visit.id_patient == pacjentId) & (db.visit.visit_day > request.now.date),
             user_signature=False,
-            editable=True,
+            editable=False,
             deletable=False,
             details=True,
             create=False,
@@ -56,7 +56,7 @@ def moje_wizyty():
         )
         grid2 = SQLFORM.grid((db.visit.id_patient == pacjentId) & (db.visit.visit_day < request.now.date),
             user_signature=False,
-            editable=True,
+            editable=False,
             deletable=False,
             details=True,
             create=False,
