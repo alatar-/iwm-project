@@ -1,4 +1,4 @@
 #crontab
 
-#*/5	*   *   *   *	root 	*applications/medibox/cron/notifications.py
-*   *   *   *   *	root	*applications/medibox/cron/test.py
+*	*   *   *   *	root 	*applications/medibox/cron/notifications.py
+
