@@ -5,3 +5,8 @@ ol, ul {
 .parsley-errors-list {
 	color: red;
 }
+
+.generic_widget {
+	width: 700px;
+	height: 200px;
+}

@@ -107,11 +107,9 @@ db.define_table(
 
 db.define_table(
     'med_procedure',
-    Field('category'),
+    Field('category', unique=True),
     Field('title'),
-    Field('subcategory'),
-    Field('detail'),
-    format = '%(category)s %(title)s %(subcategory)s %(detail)s'
+    format = '%(category)s %(title)s'
 ) 
 
 
